@@ -65,8 +65,8 @@ public class AlarmsAPI extends Validation{
         try {
                 User user = Common.getUser(request);
                 if (user != null && user.isAdmin()) {
-                    JSONObject result=null;
-                    pointValuesStorungsAndAlarms.setAcknowledge(Integer.valueOf(id));
+                    JSONObject result=new JSONObject();
+                    pointValuesStorungsAndAlarms.setAcknowledge(Integer.valueOf(id),result);
                     return new ResponseEntity<String>( result.toString() , HttpStatus.OK);
                 } else {
                     return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
@@ -86,7 +86,7 @@ public class AlarmsAPI extends Validation{
     {
         LOG.info("/alarms/history/{date_day}/{filter_with_mysqlrlike}/{offset}/{limit}");
         String value = "";
-        if ( ( value = doGivenParameterHaveValueFromScopeSince1To23(date_day)) != null ){
+        if ( ( value = doGivenParameterHaveCorrectDateFormat(date_day)) != null ){
             return new ResponseEntity<String>("Value date_day is not correct."+value, HttpStatus.OK);
         }
         if ( !validate("filter_with_mysqlrlike",filter_with_mysqlrlike) ){
